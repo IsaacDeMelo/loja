@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho - <%= store.name %></title>
+  <link rel="stylesheet" href="/css/store.css">
+</head>
+<body>
+  <nav class="navbar" style="background-color: <%= store.theme_color %>;">
+    <div class="container">
+      <a href="/" class="logo"><%= store.name %></a>
+      <ul class="nav-links">
+        <li><a href="/">Produtos</a></li>
+        <li><a href="/cart">Carrinho</a></li>
+        <li><a href="/validate">Validar NF</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <h1 class="page-title">Carrinho de Compras</h1>
+    
+    <% if (items.length === 0) { %>
+      <div class="empty-state">
+        <p>Seu carrinho está vazio.</p>
+        <a href="/" class="btn btn-primary">Continuar Comprando</a>
+      </div>
+    <% } else { %>
+      <div class="cart-items">
+        <% items.forEach(item => { %>
+          <div class="cart-item">
+            <% if (item.image) { %>
+              <img src="<%= item.image %>" alt="<%= item.name %>" class="cart-item-image">
+            <% } else { %>
+              <div class="cart-item-image-placeholder">Sem imagem</div>
+            <% } %>
+            <div class="cart-item-details">
+              <h3><%= item.name %></h3>
+              <p class="cart-item-price">R$ <%= parseFloat(item.price).toFixed(2) %></p>
+            </div>
+            <div class="cart-item-quantity">
+              <label>Quantidade:</label>
+              <input type="number" 
+                     value="<%= item.quantity %>" 
+                     min="0" 
+                     onchange="updateQuantity(<%= item.product_id %>, this.value)">
+            </div>
+            <div class="cart-item-total">
+              <strong>R$ <%= (parseFloat(item.price) * item.quantity).toFixed(2) %></strong>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+      
+      <div class="cart-summary">
+        <h2>Total: R$ <%= parseFloat(total).toFixed(2) %></h2>
+        <div class="cart-actions">
+          <a href="/" class="btn btn-secondary">Continuar Comprando</a>
+          <a href="/checkout" class="btn btn-primary">Finalizar Compra</a>
+        </div>
+      </div>
+    <% } %>
+  </div>
+  
+  <script>
+    function updateQuantity(productId, quantity) {
+      fetch(`/cart/update/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ quantity: parseInt(quantity) })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          location.reload();
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</body>
+</html>

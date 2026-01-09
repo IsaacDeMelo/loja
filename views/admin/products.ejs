@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos - Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/admin/stores" class="logo">RPG Loja Admin</a>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <div class="page-header">
+      <h1>Gerenciar Produtos</h1>
+      <div>
+        <a href="/admin/stores/<%= storeId %>/products/new" class="btn btn-primary">Novo Produto</a>
+        <a href="/admin/stores" class="btn btn-secondary">Voltar para Lojas</a>
+      </div>
+    </div>
+    
+    <% if (products.length === 0) { %>
+      <div class="empty-state">
+        <p>Nenhum produto cadastrado ainda.</p>
+        <a href="/admin/stores/<%= storeId %>/products/new" class="btn btn-primary">Adicionar Primeiro Produto</a>
+      </div>
+    <% } else { %>
+      <div class="products-grid">
+        <% products.forEach(product => { %>
+          <div class="product-card">
+            <% if (product.image) { %>
+              <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
+            <% } else { %>
+              <div class="product-image-placeholder">Sem imagem</div>
+            <% } %>
+            <div class="product-body">
+              <h3><%= product.name %></h3>
+              <p><%= product.description || 'Sem descrição' %></p>
+              <p class="product-price">R$ <%= parseFloat(product.price).toFixed(2) %></p>
+            </div>
+            <div class="product-actions">
+              <a href="/admin/stores/<%= storeId %>/products/<%= product.id %>/edit" class="btn btn-secondary">Editar</a>
+              <form method="POST" action="/admin/stores/<%= storeId %>/products/<%= product.id %>/delete" style="display: inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este produto?')">Excluir</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lojas - Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/admin/stores" class="logo">RPG Loja Admin</a>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <div class="page-header">
+      <h1>Gerenciar Lojas</h1>
+      <a href="/admin/stores/new" class="btn btn-primary">Nova Loja</a>
+    </div>
+    
+    <% if (stores.length === 0) { %>
+      <div class="empty-state">
+        <p>Nenhuma loja cadastrada ainda.</p>
+        <a href="/admin/stores/new" class="btn btn-primary">Criar Primeira Loja</a>
+      </div>
+    <% } else { %>
+      <div class="stores-grid">
+        <% stores.forEach(store => { %>
+          <div class="store-card">
+            <div class="store-header" style="background-color: <%= store.theme_color %>;">
+              <h3><%= store.name %></h3>
+            </div>
+            <div class="store-body">
+              <p><strong>Subdomínio:</strong> <%= store.subdomain %></p>
+              <p><strong>URL:</strong> http://<%= store.subdomain %>.localhost:3000</p>
+              <p class="store-date">Criada em: <%= new Date(store.created_at).toLocaleDateString('pt-BR') %></p>
+            </div>
+            <div class="store-actions">
+              <a href="/admin/stores/<%= store.id %>/products" class="btn btn-secondary">Produtos</a>
+              <a href="/admin/stores/<%= store.id %>/edit" class="btn btn-secondary">Editar</a>
+              <form method="POST" action="/admin/stores/<%= store.id %>/delete" style="display: inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta loja?')">Excluir</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
