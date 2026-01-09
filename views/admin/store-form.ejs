@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= store ? 'Editar' : 'Nova' %> Loja - Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/admin/stores" class="logo">RPG Loja Admin</a>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <div class="page-header">
+      <h1><%= store ? 'Editar' : 'Nova' %> Loja</h1>
+      <a href="/admin/stores" class="btn btn-secondary">Voltar</a>
+    </div>
+    
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+    
+    <form method="POST" action="<%= store ? `/admin/stores/${store.id}` : '/admin/stores' %>" class="form">
+      <div class="form-group">
+        <label for="name">Nome da Loja:</label>
+        <input type="text" id="name" name="name" value="<%= store ? store.name : '' %>" required>
+      </div>
+      
+      <% if (!store) { %>
+        <div class="form-group">
+          <label for="subdomain">Subdomínio:</label>
+          <input type="text" id="subdomain" name="subdomain" value="<%= store ? store.subdomain : '' %>" pattern="[a-z0-9-]+" required>
+          <small>Apenas letras minúsculas, números e hífens. Ex: minha-loja</small>
+        </div>
+      <% } %>
+      
+      <div class="form-group">
+        <label for="theme_color">Cor do Tema:</label>
+        <input type="color" id="theme_color" name="theme_color" value="<%= store ? store.theme_color : '#3498db' %>">
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= store ? 'Atualizar' : 'Criar' %> Loja</button>
+        <a href="/admin/stores" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - RPG Loja Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/admin/stores" class="logo">RPG Loja Admin</a>
+      <ul class="nav-links">
+        <li><a href="/admin/stores">Lojas</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <%- body %>
+  </div>
+  
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 RPG Loja Admin. Sistema de gerenciamento de lojas RPG.</p>
+    </div>
+  </footer>
+</body>
+</html>

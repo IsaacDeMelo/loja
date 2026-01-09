@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Compra - <%= store.name %></title>
+  <link rel="stylesheet" href="/css/store.css">
+</head>
+<body>
+  <nav class="navbar" style="background-color: <%= store.theme_color %>;">
+    <div class="container">
+      <a href="/" class="logo"><%= store.name %></a>
+      <ul class="nav-links">
+        <li><a href="/">Produtos</a></li>
+        <li><a href="/cart">Carrinho</a></li>
+        <li><a href="/validate">Validar NF</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <h1 class="page-title">Finalizar Compra</h1>
+    
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+    
+    <div class="checkout-container">
+      <div class="checkout-form">
+        <h2>Informações do Cliente</h2>
+        <form method="POST" action="/checkout" class="form">
+          <div class="form-group">
+            <label for="customer_name">Nome Completo *</label>
+            <input type="text" id="customer_name" name="customer_name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="customer_email">Email *</label>
+            <input type="email" id="customer_email" name="customer_email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="customer_phone">Telefone</label>
+            <input type="tel" id="customer_phone" name="customer_phone">
+          </div>
+          
+          <div class="form-group">
+            <label for="customer_address">Endereço</label>
+            <textarea id="customer_address" name="customer_address" rows="3"></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <a href="/cart" class="btn btn-secondary">Voltar ao Carrinho</a>
+            <button type="submit" class="btn btn-primary">Gerar Nota Fiscal</button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="checkout-summary">
+        <h2>Resumo do Pedido</h2>
+        <div class="summary-items">
+          <% items.forEach(item => { %>
+            <div class="summary-item">
+              <span><%= item.name %> (x<%= item.quantity %>)</span>
+              <span>R$ <%= (parseFloat(item.price) * item.quantity).toFixed(2) %></span>
+            </div>
+          <% }); %>
+        </div>
+        <div class="summary-total">
+          <strong>Total:</strong>
+          <strong>R$ <%= parseFloat(total).toFixed(2) %></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

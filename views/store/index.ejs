@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= store.name %> - Loja RPG</title>
+  <link rel="stylesheet" href="/css/store.css">
+</head>
+<body>
+  <nav class="navbar" style="background-color: <%= store.theme_color %>;">
+    <div class="container">
+      <a href="/" class="logo"><%= store.name %></a>
+      <ul class="nav-links">
+        <li><a href="/">Produtos</a></li>
+        <li><a href="/cart">Carrinho</a></li>
+        <li><a href="/validate">Validar NF</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <h1 class="page-title">Bem-vindo à <%= store.name %></h1>
+    
+    <% if (products.length === 0) { %>
+      <div class="empty-state">
+        <p>Nenhum produto disponível no momento.</p>
+      </div>
+    <% } else { %>
+      <div class="products-grid">
+        <% products.forEach(product => { %>
+          <div class="product-card">
+            <% if (product.image) { %>
+              <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
+            <% } else { %>
+              <div class="product-image-placeholder">Sem imagem</div>
+            <% } %>
+            <div class="product-body">
+              <h3><%= product.name %></h3>
+              <p><%= product.description || '' %></p>
+              <p class="product-price">R$ <%= parseFloat(product.price).toFixed(2) %></p>
+              <button class="btn btn-primary" onclick="addToCart(<%= product.id %>)">Adicionar ao Carrinho</button>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+  
+  <div id="notification" class="notification"></div>
+  
+  <script>
+    function addToCart(productId) {
+      fetch(`/cart/add/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ quantity: 1 })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showNotification('Produto adicionado ao carrinho!', 'success');
+        } else {
+          showNotification('Erro ao adicionar produto', 'error');
+        }
+      })
+      .catch(error => {
+        showNotification('Erro ao adicionar produto', 'error');
+      });
+    }
+    
+    function showNotification(message, type) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type} show`;
+      setTimeout(() => {
+        notification.className = 'notification';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

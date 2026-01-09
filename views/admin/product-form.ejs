@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= product ? 'Editar' : 'Novo' %> Produto - Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/admin/stores" class="logo">RPG Loja Admin</a>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <div class="page-header">
+      <h1><%= product ? 'Editar' : 'Novo' %> Produto</h1>
+      <a href="/admin/stores/<%= storeId %>/products" class="btn btn-secondary">Voltar</a>
+    </div>
+    
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+    
+    <form method="POST" action="<%= product ? `/admin/stores/${storeId}/products/${product.id}` : `/admin/stores/${storeId}/products` %>" enctype="multipart/form-data" class="form">
+      <div class="form-group">
+        <label for="name">Nome do Produto:</label>
+        <input type="text" id="name" name="name" value="<%= product ? product.name : '' %>" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Descrição:</label>
+        <textarea id="description" name="description" rows="4"><%= product ? product.description : '' %></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="price">Preço (R$):</label>
+        <input type="number" id="price" name="price" step="0.01" min="0" value="<%= product ? product.price : '' %>" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="image">Imagem:</label>
+        <% if (product && product.image) { %>
+          <div class="current-image">
+            <img src="<%= product.image %>" alt="Current image" style="max-width: 200px; margin-bottom: 10px;">
+            <p>Imagem atual</p>
+          </div>
+        <% } %>
+        <input type="file" id="image" name="image" accept="image/*">
+        <small>Formatos aceitos: JPEG, JPG, PNG, GIF</small>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary"><%= product ? 'Atualizar' : 'Criar' %> Produto</button>
+        <a href="/admin/stores/<%= storeId %>/products" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validar Nota Fiscal - <%= store.name %></title>
+  <link rel="stylesheet" href="/css/store.css">
+</head>
+<body>
+  <nav class="navbar" style="background-color: <%= store.theme_color %>;">
+    <div class="container">
+      <a href="/" class="logo"><%= store.name %></a>
+      <ul class="nav-links">
+        <li><a href="/">Produtos</a></li>
+        <li><a href="/cart">Carrinho</a></li>
+        <li><a href="/validate">Validar NF</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <h1 class="page-title">Validar Nota Fiscal</h1>
+    
+    <div class="validate-container">
+      <form method="POST" action="/validate" class="form">
+        <div class="form-group">
+          <label for="invoice_code">Código da Nota Fiscal:</label>
+          <input type="text" id="invoice_code" name="invoice_code" placeholder="Ex: NF-LOJA-1234567890-ABC123" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="validation_code">Código de Validação:</label>
+          <input type="text" id="validation_code" name="validation_code" placeholder="Ex: 123456" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Validar</button>
+      </form>
+      
+      <% if (result !== null) { %>
+        <div class="validation-result">
+          <% if (result) { %>
+            <div class="alert alert-success">
+              <h2>✓ Nota Fiscal Válida!</h2>
+              <div class="invoice-details">
+                <p><strong>Código:</strong> <%= invoice.invoice_code %></p>
+                <p><strong>Cliente:</strong> <%= invoice.customer_name %></p>
+                <p><strong>Total:</strong> R$ <%= parseFloat(invoice.total_amount).toFixed(2) %></p>
+                <p><strong>Data:</strong> <%= new Date(invoice.created_at).toLocaleString('pt-BR') %></p>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="alert alert-error">
+              <h2>✗ Nota Fiscal Inválida</h2>
+              <p>O código de validação não corresponde à nota fiscal informada.</p>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+      
+      <% if (error) { %>
+        <div class="alert alert-error">
+          <%= error %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>
