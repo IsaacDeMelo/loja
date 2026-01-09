@@ -1,6 +1,10 @@
 const db = require('../config/database');
 
 // Middleware to detect and validate subdomain
+// Handles three scenarios:
+// 1. Standard domain with subdomain (e.g., store.example.com)
+// 2. Localhost development with subdomain (e.g., store.localhost)
+// 3. Main domain/localhost without subdomain (admin panel)
 function subdomainMiddleware(req, res, next) {
   const host = req.get('host');
   const parts = host.split('.');
@@ -9,7 +13,7 @@ function subdomainMiddleware(req, res, next) {
   if (parts.length >= 3 || (parts.length === 2 && parts[0] !== 'localhost')) {
     const subdomain = parts[0];
     
-    // Skip admin subdomain
+    // Skip admin subdomain - treat as main domain
     if (subdomain === 'admin') {
       req.isAdmin = true;
       return next();

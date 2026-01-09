@@ -24,7 +24,7 @@ const upload = multer({
     if (mimetype && extname) {
       return cb(null, true);
     }
-    cb(new Error('Only image files are allowed!'));
+    cb(new Error('Only image files are allowed! Supported formats: JPEG, JPG, PNG, GIF'));
   }
 }).single('image');
 

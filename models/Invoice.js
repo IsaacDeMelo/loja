@@ -4,13 +4,14 @@ class Invoice {
   // Generate validation code based on mathematical formula
   static generateValidationCode(invoiceCode, totalAmount) {
     // Mathematical formula for validation code
-    // Using: (sum of ASCII values of invoice code) * (total amount * 100) % 999999
+    // Using: (sum of ASCII values of invoice code) * (total amount in cents) % 999999
     let asciiSum = 0;
     for (let i = 0; i < invoiceCode.length; i++) {
       asciiSum += invoiceCode.charCodeAt(i);
     }
     
-    const amountCents = Math.round(totalAmount * 100);
+    // Convert to cents using integer arithmetic to avoid floating-point precision issues
+    const amountCents = Math.floor(totalAmount * 100);
     const validationNumber = (asciiSum * amountCents) % 999999;
     
     // Format as 6-digit code with leading zeros

@@ -20,10 +20,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session configuration
 app.use(session({
-  secret: 'rpg-loja-secret-key-change-in-production',
+  secret: process.env.SESSION_SECRET || 'rpg-loja-secret-key-change-in-production',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } // Set to true in production with HTTPS
+  cookie: { secure: process.env.NODE_ENV === 'production' } // Set to true in production with HTTPS
 }));
 
 // Subdomain detection middleware
