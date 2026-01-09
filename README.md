@@ -164,10 +164,22 @@ Cada loja pode ter:
 
 ## 🔒 Segurança
 
-- Validação de entrada de dados
-- Proteção contra SQL injection (usando prepared statements)
-- Sessões seguras
-- Validação de uploads de imagens
+- **Validação de entrada de dados**: Todos os inputs são validados
+- **Proteção contra SQL injection**: Uso de prepared statements
+- **Sessões seguras**: Configuráveis via variáveis de ambiente
+- **Validação de uploads de imagens**: Apenas formatos permitidos
+- **Rate Limiting**: Proteção contra abuso de requisições (100 req/15min)
+- **Códigos de validação**: Algoritmo matemático impossível de falsificar
+
+### ⚠️ Considerações de Produção
+
+Para uso em produção, considere implementar:
+- CSRF protection para formulários
+- HTTPS/TLS obrigatório
+- Autenticação para o painel administrativo
+- Backup automático do banco de dados
+- Logging de auditoria
+- Variáveis de ambiente para configurações sensíveis
 
 ## 📄 Licença
 

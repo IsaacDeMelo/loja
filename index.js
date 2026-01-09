@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const rateLimit = require('express-rate-limit');
 const path = require('path');
 const subdomainMiddleware = require('./middleware/subdomain');
 const adminRoutes = require('./routes/admin');
@@ -8,6 +9,16 @@ const storeRoutes = require('./routes/store');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Rate limiting middleware to prevent abuse
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.'
+});
+
+// Apply rate limiting to all routes
+app.use(limiter);
 
 // View engine setup
 app.set('view engine', 'ejs');
